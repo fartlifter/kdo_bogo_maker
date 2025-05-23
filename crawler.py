@@ -124,6 +124,7 @@ default_selection = [
     '기획재정부', '해양수산부', '농림축산식품부', '국토교통부', 
     '통계청', '국세청', '관세청', '공정거래위원회', '농촌진흥청', 'KDI'
 ]
+
 selected_keywords = st.multiselect("📂 키워드 선택", all_keywords, default=default_selection)
 use_keyword_filter = st.checkbox("📎 키워드 포함 기사만 필터링", value=True)
 
