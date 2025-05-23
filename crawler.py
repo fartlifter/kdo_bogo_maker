@@ -180,7 +180,7 @@ if st.button("✅ [단독] 뉴스 수집 시작"):
                     if result and result["링크"] not in seen_links:
                         seen_links.add(result["링크"])
                         all_articles.append(result)
-                        st.markdown(f"**△{result['매체']}/{result['제목']}**")
+                        st.markdown(f"**@{result['매체']}/{result['제목']}**")
                         st.caption(result["날짜"])
                         st.markdown(f"🔗 [원문 보기]({result['링크']})")
                         if result["필터일치"]:
