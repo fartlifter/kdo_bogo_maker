@@ -34,10 +34,8 @@ def extract_media_name(url):
     try:
         domain = url.split("//")[-1].split("/")[0]
         parts = domain.split(".")
-        
-        # 복합 도메인용 키 우선 검사
         if len(parts) >= 3:
-            composite_key = f"{parts[-3]}.{parts[-2]}"  # e.g. "biz.chosun"
+            composite_key = f"{parts[-3]}.{parts[-2]}"  # 예: biz.chosun
         else:
             composite_key = parts[0]
 
@@ -48,10 +46,9 @@ def extract_media_name(url):
             "imnews": "MBC", "jtbc": "JTBC", "ichannela": "채널A", "tvchosun": "TV조선",
             "mk": "매경", "sedaily": "서경", "hankyung": "한경", "news1": "뉴스1",
             "newsis": "뉴시스", "yna": "연합", "mt": "머투", "weekly": "주간조선",
-            "biz.chosun": "조선비즈"  # 추가된 조선비즈 매핑
+            "biz.chosun": "조선비즈"
         }
 
-        # 복합 키 우선 매핑, 없으면 기본 도메인 기준 매핑
         if composite_key in media_mapping:
             return media_mapping[composite_key]
         for part in reversed(parts):
@@ -60,7 +57,6 @@ def extract_media_name(url):
         return composite_key.upper()
     except:
         return "[매체추출실패]"
-
 
 def safe_api_request(url, headers, params, max_retries=3):
     for _ in range(max_retries):
@@ -94,7 +90,11 @@ def fetch_and_filter(item, start_dt, end_dt, selected_keywords, use_keyword_filt
     highlighted_body = body
     for kw in matched_keywords:
         highlighted_body = highlighted_body.replace(kw, f"<mark>{kw}</mark>")
-    media = extract_media_name(item.get("originallink", ""))
+
+    originallink = item.get("originallink")
+    fallback_link = item.get("link")
+    media = extract_media_name(originallink if originallink else fallback_link)
+
     return {
         "키워드": "[단독]",
         "매체": media,
@@ -109,13 +109,19 @@ def fetch_and_filter(item, start_dt, end_dt, selected_keywords, use_keyword_filt
 
 # === 키워드 목록 ===
 all_keywords = [
-    '기획재정부', '해양수산부', '농림축산식품부', '국토교통부', '농촌진흥청',
-    '통계청', '국세청', '관세청', '공정거래위원회', 'KDI',
-    '과학기술정보통신부', '방송통신위원회', '한국소비자원'
+    '기획재정부', '해양수산부', '농림축산식품부', '국토교통부', '과학기술정보통신부',
+    '방송통신위원회', '통계청', '국세청', '관세청', '공정거래위원회', '한국소비자원', '농촌진흥청', 'KDI'
 ]
 
+default_selection = [
+    '기획재정부', '해양수산부', '농림축산식품부', '국토교통부',
+    '통계청', '국세청', '관세청', '공정거래위원회', '농촌진흥청', 'KDI'
+]
+
+valid_default_selection = [kw for kw in default_selection if kw in all_keywords]
+
 # === UI ===
-st.title("📰 [단독] 뉴스 수집기")
+st.title("📰 [단독] 뉴스 수집기_강동용 ver")
 st.markdown("✅ [단독] 기사를 수집하고 선택한 키워드가 본문에 포함된 기사만 필터링합니다.")
 
 now = datetime.now(ZoneInfo("Asia/Seoul"))
@@ -132,11 +138,7 @@ with col2:
     end_time = st.time_input("종료 시각", value=time(now.hour, now.minute))
     end_dt = datetime.combine(end_date, end_time).replace(tzinfo=ZoneInfo("Asia/Seoul"))
 
-default_selection = [
-    '기획재정부', '해양수산부', '농림축산식품부', '국토교통부', '농촌진흥청',
-    '통계청', '국세청', '관세청', '공정거래위원회', 'KDI'
-]
-selected_keywords = st.multiselect("📂 키워드 선택", all_keywords, default=default_selection)
+selected_keywords = st.multiselect("📂 키워드 선택", all_keywords, default=valid_default_selection)
 use_keyword_filter = st.checkbox("📎 키워드 포함 기사만 필터링", value=True)
 
 if st.button("✅ [단독] 뉴스 수집 시작"):
@@ -178,7 +180,7 @@ if st.button("✅ [단독] 뉴스 수집 시작"):
                     if result and result["링크"] not in seen_links:
                         seen_links.add(result["링크"])
                         all_articles.append(result)
-                        st.markdown(f"**@{result['매체']}/{result['제목']}**")
+                        st.markdown(f"**△{result['매체']}/{result['제목']}**")
                         st.caption(result["날짜"])
                         st.markdown(f"🔗 [원문 보기]({result['링크']})")
                         if result["필터일치"]:
