@@ -98,24 +98,13 @@ def fetch_and_filter(item, start_dt, end_dt, selected_keywords, use_keyword_filt
 
 # === 키워드 목록 ===
 all_keywords = [
-    '기획재정부', '해양수산부', '농림축산식품부', '국토교통부', '과학기술정보통신부',
-    '방송통신위원회', '통계청', '국세청', '관세청', '공정거래위원회', '한국소비자원', '농촌진흥청', 'KDI'
+    '기획재정부', '해양수산부', '농림축산식품부', '국토교통부', '농촌진흥청',
+    '통계청', '국세청', '관세청', '공정거래위원회', 'KDI',
+    '과학기술정보통신부', '방송통신위원회', '한국소비자원'
 ]
-
-# === 기본 선택 키워드 ===
-default_selection = [
-    '기획재정부', '해양수산부', '농림축산식품부', '국토교통부',
-    '통계청', '국세청', '관세청', '공정거래위원회', '농촌진흥청', 'KDI'
-]
-
-# === default 유효성 검증 ===
-valid_default_selection = [kw for kw in default_selection if kw in all_keywords]
-invalid_defaults = [kw for kw in default_selection if kw not in all_keywords]
-if invalid_defaults:
-    st.warning(f"⚠️ 기본 키워드 중 all_keywords에 없는 값이 있습니다: {invalid_defaults}")
 
 # === UI ===
-st.title("📰 [단독] 뉴스 수집기_강동용 ver")
+st.title("📰 [단독] 뉴스 수집기")
 st.markdown("✅ [단독] 기사를 수집하고 선택한 키워드가 본문에 포함된 기사만 필터링합니다.")
 
 now = datetime.now(ZoneInfo("Asia/Seoul"))
@@ -132,7 +121,11 @@ with col2:
     end_time = st.time_input("종료 시각", value=time(now.hour, now.minute))
     end_dt = datetime.combine(end_date, end_time).replace(tzinfo=ZoneInfo("Asia/Seoul"))
 
-selected_keywords = st.multiselect("📂 키워드 선택", all_keywords, default=valid_default_selection)
+default_selection = [
+    '기획재정부', '해양수산부', '농림축산식품부', '국토교통부', '농촌진흥청',
+    '통계청', '국세청', '관세청', '공정거래위원회', 'KDI'
+]
+selected_keywords = st.multiselect("📂 키워드 선택", all_keywords, default=default_selection)
 use_keyword_filter = st.checkbox("📎 키워드 포함 기사만 필터링", value=True)
 
 if st.button("✅ [단독] 뉴스 수집 시작"):
@@ -174,7 +167,7 @@ if st.button("✅ [단독] 뉴스 수집 시작"):
                     if result and result["링크"] not in seen_links:
                         seen_links.add(result["링크"])
                         all_articles.append(result)
-                        st.markdown(f"**△{result['매체']}/{result['제목']}**")
+                        st.markdown(f"**@{result['매체']}/{result['제목']}**")
                         st.caption(result["날짜"])
                         st.markdown(f"🔗 [원문 보기]({result['링크']})")
                         if result["필터일치"]:
