@@ -99,7 +99,7 @@ def fetch_and_filter(item, start_dt, end_dt, selected_keywords, use_keyword_filt
 # === 키워드 목록 ===
 all_keywords = [
     '기획재정부', '해양수산부', '농림축산식품부', '국토교통부', '과학기술정보통신부',
-    '방송통신위원회', '통계청', '국세청', '관세청', '공정거래위원회', '한국소비자원', 'KDI'
+    '방송통신위원회', '통계청', '국세청', '관세청', '공정거래위원회', '한국소비자원', '농촌진흥청' 'KDI'
 ]
 
 # === UI ===
@@ -121,8 +121,8 @@ with col2:
     end_dt = datetime.combine(end_date, end_time).replace(tzinfo=ZoneInfo("Asia/Seoul"))
 
 default_selection = [
-    '기획재정부', '해양수산부', '농림축산식품부', '국토교통부', '과학기술정보통신부',
-    '방송통신위원회', '통계청', '국세청', '관세청', '공정거래위원회', '한국소비자원', 'KDI'
+    '기획재정부', '해양수산부', '농림축산식품부', '국토교통부', 
+    '통계청', '국세청', '관세청', '공정거래위원회', '농촌진흥청', 'KDI'
 ]
 selected_keywords = st.multiselect("📂 키워드 선택", all_keywords, default=default_selection)
 use_keyword_filter = st.checkbox("📎 키워드 포함 기사만 필터링", value=True)
