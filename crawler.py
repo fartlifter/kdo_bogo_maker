@@ -45,7 +45,7 @@ def extract_media_name(url):
             "kmib": "국민", "munhwa": "문화", "kbs": "KBS", "sbs": "SBS",
             "imnews": "MBC", "jtbc": "JTBC", "ichannela": "채널A", "tvchosun": "TV조선",
             "mk": "매경", "sedaily": "서경", "hankyung": "한경", "news1": "뉴스1",
-            "newsis": "뉴시스", "yna": "연합", "mt": "머투", "weekly": "주간조선"
+            "newsis": "뉴시스", "yna": "연합", "mt": "머투", "biz": "조선비즈", "weekly": "주간조선"
         }
         return media_mapping.get(media_key.lower(), media_key.upper())
     except:
