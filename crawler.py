@@ -102,7 +102,13 @@ all_keywords = [
     '방송통신위원회', '통계청', '국세청', '관세청', '공정거래위원회', '한국소비자원', '농촌진흥청', 'KDI'
 ]
 
-# === UI ===
+# 기본 선택 키워드
+default_selection = [
+    '기획재정부', '해양수산부', '농림축산식품부', '국토교통부',
+    '통계청', '국세청', '관세청', '공정거래위원회', '농촌진흥청', 'KDI'
+]
+
+# Streamlit 앱 UI
 st.title("📰 [단독] 뉴스 수집기_강동용 ver")
 st.markdown("✅ [단독] 기사를 수집하고 선택한 키워드가 본문에 포함된 기사만 필터링합니다.")
 
@@ -120,12 +126,10 @@ with col2:
     end_time = st.time_input("종료 시각", value=time(now.hour, now.minute))
     end_dt = datetime.combine(end_date, end_time).replace(tzinfo=ZoneInfo("Asia/Seoul"))
 
-default_selection = [
-    '기획재정부', '해양수산부', '농림축산식품부', '국토교통부',
-    '통계청', '국세청', '관세청', '공정거래위원회', '농촌진흥청', 'KDI'
-]
+# 안전하게 default만 all_keywords에 존재하는 값으로 제한
+valid_default_selection = [kw for kw in default_selection if kw in all_keywords]
 
-selected_keywords = st.multiselect("📂 키워드 선택", all_keywords, default=default_selection)
+selected_keywords = st.multiselect("📂 키워드 선택", all_keywords, default=valid_default_selection)
 use_keyword_filter = st.checkbox("📎 키워드 포함 기사만 필터링", value=True)
 
 if st.button("✅ [단독] 뉴스 수집 시작"):
@@ -167,7 +171,7 @@ if st.button("✅ [단독] 뉴스 수집 시작"):
                     if result and result["링크"] not in seen_links:
                         seen_links.add(result["링크"])
                         all_articles.append(result)
-                        st.markdown(f"**△{result['매체']}/{result['제목']}**")
+                        st.markdown(f"**@{result['매체']}/{result['제목']}**")
                         st.caption(result["날짜"])
                         st.markdown(f"🔗 [원문 보기]({result['링크']})")
                         if result["필터일치"]:
