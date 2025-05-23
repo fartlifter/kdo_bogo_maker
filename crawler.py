@@ -121,7 +121,7 @@ with col2:
     end_dt = datetime.combine(end_date, end_time).replace(tzinfo=ZoneInfo("Asia/Seoul"))
 
 default_selection = [
-    '기획재정부', '해양수산부', '농림축산식품부', '국토교통부', 
+    '기획재정부', '해양수산부', '농림축산식품부', '국토교통부',
     '통계청', '국세청', '관세청', '공정거래위원회', '농촌진흥청', 'KDI'
 ]
 
