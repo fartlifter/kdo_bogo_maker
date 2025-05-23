@@ -127,7 +127,15 @@ with col2:
     end_dt = datetime.combine(end_date, end_time).replace(tzinfo=ZoneInfo("Asia/Seoul"))
 
 # 안전하게 default만 all_keywords에 존재하는 값으로 제한
-valid_default_selection = [kw for kw in default_selection if kw in all_keywords]
+invalid_defaults = [kw for kw in default_selection if kw not in all_keywords]
+if invalid_defaults:
+    st.error(f"다음 기본 키워드가 all_keywords에 없습니다: {invalid_defaults}")
+
+selected_keywords = st.multiselect(
+    "📂 키워드 선택",
+    options=all_keywords,
+    default=[kw for kw in default_selection if kw in all_keywords]
+)
 
 selected_keywords = st.multiselect("📂 키워드 선택", all_keywords, default=valid_default_selection)
 use_keyword_filter = st.checkbox("📎 키워드 포함 기사만 필터링", value=True)
