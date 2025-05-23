@@ -103,7 +103,7 @@ all_keywords = [
 ]
 
 # === UI ===
-st.title("📰 [단독] 뉴스 수집기")
+st.title("📰 [단독] 뉴스 수집기_강동용 ver")
 st.markdown("✅ [단독] 기사를 수집하고 선택한 키워드가 본문에 포함된 기사만 필터링합니다.")
 
 now = datetime.now(ZoneInfo("Asia/Seoul"))
