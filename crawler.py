@@ -109,11 +109,13 @@ def fetch_and_filter(item, start_dt, end_dt, selected_keywords, use_keyword_filt
 all_keywords = [
     '기획재정부', '해양수산부', '농림축산식품부', '국토교통부', '과학기술정보통신부',
     '방송통신위원회', '통계청', '국세청', '관세청', '공정거래위원회', '한국소비자원', '농촌진흥청', 'KDI'
+    '산업통산자원부'
 ]
 
 default_selection = [
     '기획재정부', '해양수산부', '농림축산식품부', '국토교통부',
     '통계청', '국세청', '관세청', '공정거래위원회', '농촌진흥청', 'KDI'
+    '산업통산자원부'
 ]
 
 valid_default_selection = [kw for kw in default_selection if kw in all_keywords]
